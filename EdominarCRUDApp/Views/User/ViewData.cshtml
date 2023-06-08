@@ -1,0 +1,194 @@
+﻿<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Email</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Hobby</th>
+        <th scope="col">Mobile</th>
+        <th scope="col">State</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+               
+                <h4 class="modal-title">View Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        Name:<b><p id="name"></p></b>
+                    </div>
+                    <div class="col-4">
+                        Address:<b><p id="address"></p></b>
+                    </div>
+                    <div class="col-4">
+                        Mobile Number:<b><p id="mobileNumber"></p></b>
+                    </div>
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col-4">
+                        Gender:<b><p id="gender"></p></b>
+                    </div>
+                    <div class="col-4">
+                        Hobby:<b><p id="hobby"></p></b>
+                    </div>
+                    <div class="col-4">
+                        State:<b><p id="state"></p></b>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-4">
+                       
+                    </div>
+                    <div class="col-4">
+                        Email:<b><p id="email"></p></b>
+                    </div>
+                    
+                </div>
+
+            </div>
+            
+            <div class="modal-footer">
+               
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CloseModal()">Close</button>
+            </div>
+        </div>
+      
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">View Data</h4>
+            </div>
+            <div class="modal-body">
+                
+                <h6>Confirm To Delete</h6>
+               <input type="hidden" id="id"/>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CloseModal()">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="ConfirmDeleteModal()">Confirm</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        LoadGridData();
+    });
+
+    function LoadGridData()
+    {
+        $("table tbody").text("");
+        $.ajax({
+            url: "/User/GetData",
+            type: "GET",
+
+            success: function (result) {
+                debugger;
+                var markup;
+
+                $.each(result.userData, function (index, value) {
+                    markup += "<tr>" + "<td>" + value.name + "</td>" + "<td>" + value.address + "</td>" + "<td>" + value.email + "</td>" + "<td>" + value.gender + "<td>" + value.hobby + "<td>" + value.mobile + "<td>" + value.state + "<td>" + "<button type='button' onClick=Action('Edit'," + value.id + ") class='btn btn - primary'>Edit</button>/<button type='button' onClick=Action('Delete'," + value.id + ") class='btn btn - primary'>Delete</button>/<button type='button' onClick=Action('ViewData'," + value.id + ") class='btn btn - primary'>ViewData</button>" + "</td>" + "</tr>";
+
+                });
+                $("table tbody").append(markup);
+            },
+            error: function (errormessage) {
+                debugger;
+            }
+        });
+    }
+    function Action(status, id) {
+        if (status == "Edit") {
+            window.location.href = "@Url.Action("Edit", "User")?id="
+                + id;
+        }
+        if (status == "Delete") {
+            $("#myModal1").modal("show");
+            $("#id").val(id);
+
+        }
+        if (status == "ViewData") {
+            $("#myModal").modal("show");
+            LoadData(id);
+           
+        }
+    }
+    function LoadData(id) {
+        
+        debugger;
+        var datas = {
+            id: id
+        };
+        $.ajax({
+            url: "/User/GetUserDataById",
+            type: "Get",
+            data: datas,
+            success: function (result) {
+                $('#name').text(result.getDataById.name);
+                $('#address').text(result.getDataById.address);
+                $('#mobileNumber').text(result.getDataById.mobile);
+                $('#gender').text(result.getDataById.gender);
+                $('#hobby').text(result.getDataById.hobby);
+                $('#state').text(result.getDataById.state);
+                $('#email').text(result.getDataById.email);
+            },
+            error: function (errormessage) {
+                debugger;
+            }
+        });
+    }
+
+    function ConfirmDeleteModal() {
+        debugger;
+        var id = $("#id").val();
+        var datas = {
+            id: id
+        };
+        $.ajax({
+            url: "/User/DeleteUserData",
+            type: "POST",
+            data: datas,
+            success: function (result) {
+                debugger;
+                LoadGridData();
+                $("#myModal1").modal("hide");
+            },
+            error: function (errormessage) {
+                debugger;
+            }
+        });
+    }
+    function CloseModal() {
+        $("#myModal").modal("hide");
+        $('#myModal1').modal('hide');
+    }
+</script>

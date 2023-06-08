@@ -1,0 +1,295 @@
+﻿
+<section class="h-100 h-custom" style="background-color: #8fc4b7;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8 col-xl-6">
+                n
+                <div class="card rounded-3">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img3.webp"
+                         class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                         alt="Sample photo">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registration Info</h3>
+                        <div class="alert alert-primary" role="alert" style="display:none">
+                            <p id="registrationStatus"></p>
+                        </div>
+                        <form class="px-md-2">
+                            <input type="hidden" id="id" class="form-control" />
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example1q">Name</label>
+                                <input type="text" id="name" class="form-control" onkeyup="onChangeValidation('nameValidation')" />
+                                <div class='validation' style='color:red;margin-bottom: 20px;' id="nameValidation">Name Is Required</div>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example1q">Mobile</label>
+                                <input type="number" id="mobile" class="form-control" onkeyup="onChangeValidation('mobileValidation')" />
+                                <div class='validation' style='color:red;margin-bottom: 20px;' id="mobileValidation">Mobile Number Is Required</div>
+
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example1q">Email</label>
+                                <input type="email" id="email" class="form-control" onkeyup="onChangeValidation('emailValidation')" />
+                                <div class='validation' style='color:red;margin-bottom: 20px;' id="emailValidation">Email Is Required</div>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example1q"> Address</label>
+                                <textarea class="form-control" id="address" rows="3" onkeyup="onChangeValidation('addressValidation')"></textarea>
+                                <div class='validation' style='color:red;margin-bottom: 20px;' id="addressValidation">Address Is Required</div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="exampleDatepicker1" class="form-label">Select State</label>
+                                <div class="form-outline datepicker">
+                                    <select class="select" id="States" onchange="onChangeValidation('stateValidation')">
+                                        <option value="1" disabled selected="">Select State</option>
+
+                                    </select>
+                                    <div class='validation' style='color:red;margin-bottom: 20px;' id="stateValidation">State Is Required</div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label for="exampleDatepicker1" class="form-label">Select Hobby</label>
+
+                                    <select id="hobby" class="selectpicker" multiple onchange="onChangeValidation('hobbyValidation')">
+                                        <option value="1" disabled selected="">Select Hobby</option>
+
+                                    </select>
+                                    <div class='validation' style='color:red;margin-bottom: 20px;' id="hobbyValidation">Hobby Is Required</div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+
+                                <h6 class="mb-2 pb-1">Gender: </h6>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="femaleGender"
+                                           value="Female" />
+                                    <label class="form-check-label" for="femaleGender">Female</label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="maleGender"
+                                           value="Male" />
+                                    <label class="form-check-label" for="maleGender">Male</label>
+                                </div>
+
+                                
+
+                            </div>
+
+                            <button type="button" class="btn btn-success btn-lg mb-1" onClick="UpdateUsers()">Update</button>
+
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#nameValidation').hide();
+        $('#mobileValidation').hide();
+        $('#emailValidation').hide();
+        $('#addressValidation').hide();
+        $('#stateValidation').hide();
+        $('#hobbyValidation').hide();
+        debugger;
+        var datas = {
+            id: @ViewBag.id
+                }
+
+        $.ajax({
+            url: "/User/EditGetByData",
+            type: "Post",
+            data: datas,
+            success: function (result) {
+                debugger;
+                if (result.getEditData.gender == "Male") {
+                    var $radios = $('input:radio[name=gender]');
+
+                    $radios.filter('[value=Male]').prop('checked', true);
+
+                } else {
+                    var $radios = $('input:radio[name=gender]');
+
+                    $radios.filter('[value=Female]').prop('checked', true);
+                }
+                $("#id").val(result.getEditData.id),
+                    $('#name').val(result.getEditData.name),
+                    $('#mobile').val(result.getEditData.mobile),
+                    $('#email').val(result.getEditData.email),
+                    $('#address').val(result.getEditData.address),
+                    $('#States').val(result.getEditData.stateId.toString()),
+                    $('#hobby').val(result.getEditData.hobbyId)
+            },
+            error: function (errMEssage) {
+
+            }
+        });
+
+        $.ajax({
+            url: "/User/GetState",
+            type: "GET",
+            success: function (result) {
+                debugger;
+                for (var i = 0; i <= result.states.length; i++) {
+                    $('#States').append('<option value="' + result.states[i].id + '">' + result.states[i].name + '</option>');
+                }
+            },
+            error: function (errMEssage) {
+
+            }
+        });
+
+        $.ajax({
+            url: "/User/GetHobby",
+            type: "GET",
+            success: function (result) {
+                debugger;
+                for (var i = 0; i <= result.hobbies.length; i++) {
+                    $('#hobby').append('<option value="' + result.hobbies[i].id + '">' + result.hobbies[i].name + '</option>');
+                }
+                $('#hobby').multiselect({
+                    includeSelectAllOption: true,
+                });
+            },
+            error: function (errMEssage) {
+
+            }
+        })
+    });
+    function validation() {
+
+        var Status = true;
+        if ($('#name').val() == "" || (/\s+/).test($('#name').val())) {
+            $('#nameValidation').show();
+            Status = false;
+        }
+        if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val())) {
+            $('#mobileValidation').show();
+            Status = false;
+        }
+        if ($('#email').val() == "" || (/\s+/).test($('#email').val())) {
+            $('#emailValidation').show();
+            Status = false;
+        }
+        if ($('#address').val() == "" || (/\s+/).test($('#address').val())) {
+            $('#addressValidation').show();
+            Status = false;
+        }
+        if ($('#States').val() == "" || $('#States').val() == null) {
+            $('#stateValidation').show();
+            Status = false;
+        }
+        if ($('#hobby').val() == "" || $('#hobby').val() == null) {
+            $('#hobbyValidation').show();
+            Status = false;
+        }
+
+        return Status;
+
+
+    }
+
+    function onChangeValidation(currentInput) {
+        if (currentInput == "nameValidation") {
+            if ($('#name').val() == "" || (/\s+/).test($('#name').val())) {
+                $('#nameValidation').show();
+            } else {
+                $('#nameValidation').hide();
+            }
+        }
+        if (currentInput == "mobileValidation") {
+            if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val())) {
+                $('#mobileValidation').show();
+            } else {
+                $('#mobileValidation').hide();
+            }
+        }
+        if (currentInput == "emailValidation") {
+            if ($('#email').val() == "" || (/\s+/).test($('#email').val())) {
+                $('#emailValidation').show();
+            } else {
+                $('#emailValidation').hide();
+            }
+        }
+        if (currentInput == "addressValidation") {
+            if ($('#address').val() == "" || (/\s+/).test($('#address').val())) {
+                $('#addressValidation').show();
+            } else {
+                $('#addressValidation').hide();
+            }
+        }
+        if (currentInput == "stateValidation") {
+            if ($('#States').val() == "" || $('#States').val() == null) {
+                $('#stateValidation').show();
+            } else {
+                $('#stateValidation').hide();
+            }
+        }
+        if (currentInput == "hobbyValidation") {
+            if ($('#hobby').val() == "" || $('#hobby').val() == null) {
+                $('#hobbyValidation').show();
+            } else {
+                $('#hobbyValidation').hide();
+            }
+        }
+    }
+
+
+    function UpdateUsers() {
+        $('#registrationStatus').text("");
+        if (validation()) {
+            debugger;
+            var gender = "";
+            if ($("#femaleGender").prop("checked")) {
+                gender = "Female"
+            } else {
+                gender = "Male"
+            }
+            debugger;
+            var registrationdata = {
+                id: @ViewBag.id,
+                name: $('#name').val(),
+                mobile: $('#mobile').val(),
+                Gender: gender,
+                email: $('#email').val(),
+                address: $('#address').val(),
+                stateId: $('#States').val(),
+                hobbyId: $('#hobby').val(),
+            };
+            debugger;
+            $.ajax({
+                url: "/User/UpdateUserDetails",
+                type: "POST",
+                data: registrationdata,
+                success: function (result) {
+                    if (result.isSuccess) {
+                        var url = '@Url.Action("ViewData", "User")';
+                        window.location.href = url;
+                    }
+                    $('.alert').show();
+                    $('#registrationStatus').text(result.message);
+                },
+                error: function (errormessage) {
+                    $('.alert').show();
+                    $('#registrationStatus').text(errormessage);
+                }
+            });
+
+        }
+    }
+
+
+</script>
