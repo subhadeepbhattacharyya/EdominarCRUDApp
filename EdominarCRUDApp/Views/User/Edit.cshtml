@@ -172,7 +172,7 @@
     function validation() {
 
         var Status = true;
-        if ($('#name').val() == "" || (/\s+/).test($('#name').val())) {
+        if ($('#name').val() == "") {
             $('#nameValidation').show();
             Status = false;
         }
@@ -184,7 +184,7 @@
             $('#emailValidation').show();
             Status = false;
         }
-        if ($('#address').val() == "" || (/\s+/).test($('#address').val())) {
+        if ($('#address').val() == "") {
             $('#addressValidation').show();
             Status = false;
         }
@@ -204,7 +204,7 @@
 
     function onChangeValidation(currentInput) {
         if (currentInput == "nameValidation") {
-            if ($('#name').val() == "" || (/\s+/).test($('#name').val())) {
+            if ($('#name').val() == "") {
                 $('#nameValidation').show();
             } else {
                 $('#nameValidation').hide();
@@ -225,7 +225,7 @@
             }
         }
         if (currentInput == "addressValidation") {
-            if ($('#address').val() == "" || (/\s+/).test($('#address').val())) {
+            if ($('#address').val() == "") {
                 $('#addressValidation').show();
             } else {
                 $('#addressValidation').hide();
