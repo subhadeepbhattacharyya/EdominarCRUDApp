@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdominarCRUDApp.Migrations
 {
     [DbContext(typeof(EdominerCRUD))]
-    [Migration("20230608153858_test")]
+    [Migration("20230610111435_test")]
     partial class test
     {
         /// <inheritdoc />
