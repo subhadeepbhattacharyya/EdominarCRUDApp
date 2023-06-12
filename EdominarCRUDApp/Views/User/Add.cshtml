@@ -142,18 +142,28 @@
             }
         })
     });
+
     function validation() {
+
+        var mobile = $('#mobile').val().toString();
+        var occurance = 0;
+        for (let i = 1; i <= mobile.length; i++) {
+            if (mobile.charAt(i) == '9') {
+                occurance = occurance + 1;
+            }
+            console.log(mobile + occurance);
+        }
 
         var Status = true;
         if ($('#name').val() == "") {
             $('#nameValidation').show();
             Status = false;
         }
-        if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val())) {
+        if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val()) || $('#mobile').val().toString().length != 10 || occurance < 2) {
             $('#mobileValidation').show();
             Status = false;
         }
-        if ($('#email').val() == "" || (/\s+/).test($('#email').val())) {
+        if ($('#email').val() == "" || (/\s+/).test($('#email').val()) || $('#email').val().includes("@("@")") == false || $('#email').val().includes(".") == false) {
             $('#emailValidation').show();
             Status = false;
         }
@@ -176,6 +186,16 @@
     }
 
     function onChangeValidation(currentInput) {
+
+        var mobile = $('#mobile').val().toString();
+        var occurance = 0;
+        for (let i = 1; i <= mobile.length; i++) {
+            if (mobile.charAt(i) == '9') {
+                occurance = occurance + 1;
+            }
+            console.log(mobile + occurance);
+        }
+
         if (currentInput == "nameValidation") {
             if ($('#name').val() == "") {
                 $('#nameValidation').show();
@@ -184,14 +204,14 @@
             }
         }
         if (currentInput == "mobileValidation") {
-            if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val())) {
+            if ($('#mobile').val() == "" || (/\s+/).test($('#mobile').val()) || $('#mobile').val().toString().length != 10 || occurance < 2) {
                 $('#mobileValidation').show();
             } else {
                 $('#mobileValidation').hide();
             }
         }
         if (currentInput == "emailValidation") {
-            if ($('#email').val() == "" || (/\s+/).test($('#email').val())) {
+            if ($('#email').val() == "" || (/\s+/).test($('#email').val()) || $('#email').val().includes("@("@")") == false || $('#email').val().includes(".") == false) {
                 $('#emailValidation').show();
             } else {
                 $('#emailValidation').hide();
